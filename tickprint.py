@@ -1,16 +1,21 @@
-# start a thread that prints input variables every set interval
 import threading
+import time
 
 
 def tickprint(object, attribute, interval):
-    """Print args every interval seconds"""
+    """Print attribute of object every interval seconds"""
 
     def printit():
-        threading.Timer(interval, printit).start()
-        try:
-            attr = getattr(object, attribute)
-            print(attr)
-        except:
-            print("Error printing vars..")
+        while True:
+            try:
+                attr = getattr(object, attribute)
+                print(attr)
+            except Exception as e:
+                print(f"Error printing vars: {e}")
+            time.sleep(interval)
 
-    printit()
+    thread = threading.Thread(target=printit)
+    thread.daemon = (
+        True  # Daemonize the thread so that it will exit when the main program exits
+    )
+    thread.start()
