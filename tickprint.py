@@ -1,21 +1,10 @@
-import threading
-import time
+import threading, time
 
 
 def tickprint(object, attribute, interval):
-    """Print attribute of object every interval seconds"""
-
-    def printit():
+    def p():
         while True:
-            try:
-                attr = getattr(object, attribute)
-                print(attr)
-            except Exception as e:
-                print(f"Error printing vars: {e}")
+            print(getattr(object, attribute, "Error"))
             time.sleep(interval)
 
-    thread = threading.Thread(target=printit)
-    thread.daemon = (
-        True  # Daemonize the thread so that it will exit when the main program exits
-    )
-    thread.start()
+    threading.Thread(target=p, daemon=True).start()
